@@ -41,7 +41,7 @@ def get_channel_videos(channel_name):
 
     channel_id = search_response['items'][0]['id']['channelId']
 
-    #Get recent videos since April 10
+    # Get recent videos since April 10
     videos_response = youtube.search().list(
         channelId=channel_id,
         part='snippet',
@@ -55,9 +55,11 @@ def get_channel_videos(channel_name):
         title = item['snippet']['title']
         video_id = item['id']['videoId']
         url = f"https://www.youtube.com/watch?v={video_id}"
+        published_at = item['snippet']['publishedAt']  # Get the published date
+        formatted_date = datetime.strptime(published_at, '%Y-%m-%dT%H:%M:%SZ').strftime('%B %d, %Y at %I:%M %p')  # Format date
 
         if title_matches(title):
-            print(f"🎯 {title}\n   {url}")
+            print(f"🎯 {title}\n   {url}\n   Published on: {formatted_date}")
             found = True
 
     if not found:
